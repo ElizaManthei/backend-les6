@@ -19,6 +19,7 @@ public class Person{
     private  List<Person> siblings = new ArrayList<>();
     private List<Person> children = new ArrayList<>();
     private List<Pet> pets = new ArrayList<>();
+    private Person partner;
 
     public Person(String name, String lastName, int age,String sex ) {
         this.name = name;
@@ -32,6 +33,14 @@ public class Person{
         this.middleName = middleName;
         this.lastName = lastName;
         this.sex = sex;
+    }
+
+    public Person getPartner() {
+        return partner;
+    }
+
+    public void setPartner(Person partner) {
+        this.partner = partner;
     }
 
     public String getName() {
@@ -127,18 +136,55 @@ public class Person{
             this.siblings.add(person);
         }
 
-        public List<Person> getGrandChildren(Person person){
-            List<Person> grandChildrens = new ArrayList<>();
-            for (Person p: person.children){
+        public List<Person> getGrandChildren(){
+            List<Person> grandChildren = new ArrayList<>();
+            for (Person p: this.children){
                 for (Person gC : p.getChildren()){
-                    grandChildrens.add(gC);
+                    grandChildren.add(gC);
                 }
             }
-            return grandChildrens;
+            return grandChildren;
         }
 
 
         public void addPet(Pet pet) {
         this.pets.add(pet);
         }
+    public void  addPartner(Person partner){
+        this.partner = partner;
+    }
+    public List<Pet> getGrandChildrensPets(){
+        List<Pet> pets = new ArrayList<>();
+        List<Person> grandChildrens = getGrandChildren();
+        for (Person gC : grandChildrens) {
+            for (Pet p : gC.pets)
+                pets.add(p);
+        }
+        return pets;
+    }
+    public List<Person> getFemaleCousins(){
+    List<Person> cousins = new ArrayList<>();
+    List<Person> motherSiblings = this.mother.getSiblings();
+    List<Person> fatherSiblings = this.father.getSiblings();
+    if(motherSiblings != null) {
+        for (Person sib : motherSiblings) {
+            for (Person c : sib.children) {
+                if (c.getSex().equals("female")) {
+                    cousins.add(c);
+                }
+            }
+        }
+    }
+    if(fatherSiblings != null) {
+        for (Person sib : fatherSiblings) {
+            for (Person c : sib.children) {
+                if (c.getSex().equals("female")) {
+                    cousins.add(c);
+                }
+            }
+        }
+    }
+
+        return cousins;
+    }
     }
